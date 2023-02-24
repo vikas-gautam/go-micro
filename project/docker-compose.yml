@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+
+  broker-service:
+    build: 
+
+      context: /home/vikash/go/src/github.com/vikas-gautam/go-micro/broker-service
+      dockerfile: /home/vikash/go/src/github.com/vikas-gautam/go-micro/broker-service/broker-service.dockerfile
+    restart: always
+    ports:
+      - "9090:9090"
+    deploy:
+      mode: replicated
+      replicas: 1
+     
