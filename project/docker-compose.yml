@@ -1,10 +1,7 @@
 version: '3'
-
 services:
-
   broker-service:
-    build: 
-
+    build:
       context: /home/vikash/go/src/github.com/vikas-gautam/go-micro/broker-service
       dockerfile: /home/vikash/go/src/github.com/vikas-gautam/go-micro/broker-service/broker-service.dockerfile
     restart: always
@@ -13,4 +10,31 @@ services:
     deploy:
       mode: replicated
       replicas: 1
-     
+
+  authentication-service:
+    build:
+      context: /home/vikash/go/src/github.com/vikas-gautam/go-micro/authentication-service
+      dockerfile: /home/vikash/go/src/github.com/vikas-gautam/go-micro/authentication-service/authentication-service.dockerfile
+    restart: always
+    ports:
+      - "9091:9091"
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      DSN: "host=postgres port=5432 user=postgres password=password dbname=users sslmode=disable timezone=UTC connect_timeout=5"
+
+
+  postgres:
+    image: 'postgres:14.2'
+    ports:
+      - "5432:5432"
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: users
+    volumes:
+      - ./db-data/postgres/:/var/lib/postgresql/data/
