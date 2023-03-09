@@ -24,6 +24,16 @@ services:
     environment:
       DSN: "host=postgres port=5432 user=postgres password=password dbname=users sslmode=disable timezone=UTC connect_timeout=5"
 
+  logger-service:
+    build:
+      context: /home/vikash/go/src/github.com/vikas-gautam/go-micro/logger-service
+      dockerfile: /home/vikash/go/src/github.com/vikas-gautam/go-micro/logger-service/logger-service.dockerfile
+    restart: always
+    ports:
+      - "8081:8081"
+    deploy:
+      mode: replicated
+      replicas: 1
 
   postgres:
     image: 'postgres:14.2'
@@ -38,6 +48,19 @@ services:
       POSTGRES_DB: users
     volumes:
         - go-micro:/var/lib/postgresql/data/
+
+
+  mongo:
+    image: 'mongo:4.2.16-bionic'
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: logs
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - go-micro:/data/db
+
 volumes:
   go-micro:
     external: true
