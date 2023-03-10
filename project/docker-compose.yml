@@ -30,7 +30,7 @@ services:
       dockerfile: /home/vikash/go/src/github.com/vikas-gautam/go-micro/logger-service/logger-service.dockerfile
     restart: always
     ports:
-      - "8081:8081"
+      - "9092:9092"
     deploy:
       mode: replicated
       replicas: 1
