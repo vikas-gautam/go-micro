@@ -35,6 +35,17 @@ services:
       mode: replicated
       replicas: 1
 
+  mailer-service:
+    build:
+      context: /home/vikash/go/src/github.com/vikas-gautam/go-micro/mail-service
+      dockerfile: /home/vikash/go/src/github.com/vikas-gautam/go-micro/mail-service/mailer-service.dockerfile
+    restart: always
+    ports:
+      - "9093:9093"
+    deploy:
+      mode: replicated
+      replicas: 1
+
   postgres:
     image: 'postgres:14.2'
     ports:
@@ -60,6 +71,12 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: password
     volumes:
       - go-micro:/data/db
+
+  mailhog:
+    image: 'mailhog/mailhog:latest'
+    ports:
+      - "1025:1025"
+      - "8025:8025"
 
 volumes:
   go-micro:

@@ -13,9 +13,9 @@ import (
 )
 
 const (
-	webPort  = "8081"
+	webPort  = "9092"
 	rpcPort  = "5001"
-	mongoURL = "mongodb://vikas:27017"
+	mongoURL = "mongodb://mongo:27017/logs"
 	gRpcPort = "50001"
 )
 
@@ -70,6 +70,7 @@ func main() {
 func connectToMongo() (*mongo.Client, error) {
 	// create connection options
 	clientOptions := options.Client().ApplyURI(mongoURL)
+
 	clientOptions.SetAuth(options.Credential{
 		Username: "admin",
 		Password: "password",
@@ -79,6 +80,13 @@ func connectToMongo() (*mongo.Client, error) {
 	c, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
 		log.Println("Error connecting:", err)
+		return nil, err
+	}
+
+	// mongoConnect does not validate URI so we need to validate this using ping
+	err = c.Ping(context.TODO(), nil)
+	if err != nil {
+		log.Println("Error while doing ping to db:", err)
 		return nil, err
 	}
 
