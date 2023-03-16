@@ -55,6 +55,17 @@ services:
       FROM_NAME: "John Smith"
       FROM_ADDRESS: john.smith@example.com
 
+  listener-service:
+    build:
+      context: /home/vikash/go/src/github.com/vikas-gautam/go-micro/listener-service
+      dockerfile: /home/vikash/go/src/github.com/vikas-gautam/go-micro/listener-service/listener-service.dockerfile
+    restart: always
+    ports:
+      - "9094:9094"
+    deploy:
+      mode: replicated
+      replicas: 1
+
   postgres:
     image: 'postgres:14.2'
     ports:
