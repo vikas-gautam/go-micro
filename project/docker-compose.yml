@@ -78,8 +78,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: users
     volumes:
-        - go-micro:/var/lib/postgresql/data/
-
+        - go-micro-postgres:/var/lib/postgresql/data/
 
   mongo:
     image: 'mongo:4.2.16-bionic'
@@ -90,7 +89,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
     volumes:
-      - go-micro:/data/db
+      - go-micro-mongo:/data/db
 
   rabbitmq:
     image: 'rabbitmq:3.9-alpine'
@@ -100,7 +99,7 @@ services:
       mode: replicated
       replicas: 1
     volumes:
-      - go-micro:/var/lib/rabbitmq/
+      - go-micro-rabbitmq:/var/lib/rabbitmq/
 
   mailhog:
     image: 'mailhog/mailhog:latest'
@@ -109,5 +108,9 @@ services:
       - "8025:8025"
 
 volumes:
-  go-micro:
+  go-micro-mongo:
+    external: true
+  go-micro-rabbitmq:
+    external: true
+  go-micro-postgres:
     external: true
